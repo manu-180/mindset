@@ -1,0 +1,36 @@
+name: mindset
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  animate_do: ^4.2.0
+  cupertino_icons: ^1.0.8
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^2.6.1
+  font_awesome_flutter: ^10.9.1
+  go_router: ^14.6.1
+  url_launcher: ^6.3.2
+  whatsapp_unilink: ^2.1.0
+
+dev_dependencies:
+  flutter_lints: ^5.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  fonts:
+    - family: Oxanium
+      fonts:
+        - asset: assets/fonts/Oxanium-VariableFont_wght.ttf
+
+  uses-material-design: true
+
+  assets:
+    - assets/fonts/
+    - assets/images/

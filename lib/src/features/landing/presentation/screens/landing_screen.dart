@@ -30,7 +30,7 @@ class LandingScreen extends ConsumerWidget {
           SingleChildScrollView(
             // Asignamos una GlobalKey al SingleChildScrollView
             // Esto es necesario para que Scrollable.ensureVisible funcione correctamente
-            key: scrollKeys.heroKey, 
+            key: scrollKeys.heroKey,
             child: Column(
               children: [
                 // Sección 1: Hero (usa la misma key que el SingleChildScrollView)
@@ -40,33 +40,38 @@ class LandingScreen extends ConsumerWidget {
                 FadeInOnScroll(
                   child: AboutProgramSection(key: scrollKeys.aboutKey),
                 ),
-            
+                
                 // Sección 3: Elite Program
                 FadeInOnScroll(
                   child: EliteProgramSection(key: scrollKeys.eliteKey),
                 ),
-            
+                
                 // Sección 4: About Author
                 FadeInOnScroll(
                   child: AboutAuthorSection(key: scrollKeys.authorKey),
                 ),
-            
+                
                 // Sección 5: Pricing (Planes)
                 FadeInOnScroll(
                   child: PricingSection(key: scrollKeys.plansKey),
                 ),
 
-                // Sección 6: Testimonials
+                // Sección 6: Testimonials (CORRECCIÓN: Añadimos ConstrainedBox)
                 FadeInOnScroll(
-                  child: TestimonialsSection(key: scrollKeys.testimonialsKey),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      // Altura del PageView (350) + padding superior/inferior = 450px
+                      maxHeight: 450, 
+                    ),
+                    child: TestimonialsSection(key: scrollKeys.testimonialsKey),
+                  ),
                 ),
-            
+                
                 // Sección 7: Guarantee
-                // Esta sección y la FAQ no necesitan key si no se accede desde el menú
                 FadeInOnScroll(
                   child: const GuaranteeSection(),
                 ),
-            
+                
                 // Sección 8: FAQ
                 FadeInOnScroll(
                   child: const FaqSection(),

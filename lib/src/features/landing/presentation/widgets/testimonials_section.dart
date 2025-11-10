@@ -11,16 +11,31 @@ class TestimonialsSection extends StatefulWidget {
 }
 
 class _TestimonialCard extends StatefulWidget {
-  const _TestimonialCard({required this.onHoverChange});
+  const _TestimonialCard({
+    required this.onHoverChange,
+    required this.imageUrl, // <-- Se añade el path de la imagen
+  });
   
   final Function(bool isHovering) onHoverChange;
+  final String imageUrl; // <-- Se añade el path de la imagen
 
   @override
   State<_TestimonialCard> createState() => _TestimonialCardState();
 }
 
 class _TestimonialsSectionState extends State<TestimonialsSection> with SingleTickerProviderStateMixin {
-  final List<String> _data = List.generate(10, (index) => 'Testimonio ${index + 1}');
+  // --- INICIO DE LA CORRECCIÓN ---
+  // Actualizamos la lista _data con las 7 imágenes de assets
+  final List<String> _data = [
+    'assets/testimonios/testimonio1.jpg',
+    'assets/testimonios/testimonio2.jpg',
+    'assets/testimonios/testimonio3.jpg',
+    'assets/testimonios/testimonio4.jpg',
+    'assets/testimonios/testimonio5.jpg',
+    'assets/testimonios/testimonio6.jpg',
+    'assets/testimonios/testimonio7.jpg',
+  ];
+  // --- FIN DE LA CORRECCIÓN ---
   
   static const int _infiniteCount = 10000;
   
@@ -153,8 +168,6 @@ class _TestimonialsSectionState extends State<TestimonialsSection> with SingleTi
     super.dispose();
   }
 
- //... (todo el código de initState, dispose, y otras funciones va aquí arriba) ...
-
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -190,11 +203,8 @@ class _TestimonialsSectionState extends State<TestimonialsSection> with SingleTi
               ),
               const SizedBox(height: 32),
 
-              // --- INICIO DE LA CORRECCIÓN ---
-              // Envolvemos el SizedBox en un MouseRegion para cambiar el cursor
               MouseRegion(
-                // Usamos el cursor de "agarrar" para indicar que es arrastrable
-                cursor: SystemMouseCursors.grab, 
+                cursor: SystemMouseCursors.grab,
                 child: SizedBox(
                   height: 370, 
                   child: PageView.builder(
@@ -202,19 +212,28 @@ class _TestimonialsSectionState extends State<TestimonialsSection> with SingleTi
                     itemCount: _infiniteCount, 
                     onPageChanged: _onPageChanged,
                     itemBuilder: (context, index) {
+                      // --- INICIO DE LA CORRECCIÓN ---
+                      // Obtenemos el índice real basado en la lista de datos
+                      final actualDataIndex = index % _data.length;
+                      // Obtenemos el path de la imagen
+                      final imagePath = _data[actualDataIndex];
+                      // --- FIN DE LA CORRECCIÓN ---
+
                       return SizedBox(
                         width: cardWidth, 
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: _TestimonialCard(onHoverChange: _handleHoverChange),
+                          // Pasamos el path de la imagen a la tarjeta
+                          child: _TestimonialCard(
+                            onHoverChange: _handleHoverChange,
+                            imageUrl: imagePath,
+                          ),
                         ),
                       );
                     },
                   ),
                 ),
               ),
-              // --- FIN DE LA CORRECCIÓN ---
-
               const SizedBox(height: 20),
               
               Row(
@@ -257,9 +276,7 @@ class _TestimonialsSectionState extends State<TestimonialsSection> with SingleTi
   }
 }
 
-
-// --- INICIO DE LA CORRECCIÓN ---
-// Widget privado para la tarjeta de testimonio (Se reemplaza AnimatedScale por AnimatedPhysicalModel)
+// Widget privado para la tarjeta de testimonio
 class _TestimonialCardState extends State<_TestimonialCard> {
   bool _isHovering = false;
   
@@ -276,34 +293,32 @@ class _TestimonialCardState extends State<_TestimonialCard> {
         setState(() => _isHovering = false);
         widget.onHoverChange(false);
       },
-      // Reemplazamos AnimatedScale por AnimatedPhysicalModel para animar la sombra
       child: AnimatedPhysicalModel(
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeOut,
-        // Animamos la elevación (sombra)
         elevation: _isHovering ? 12.0 : 4.0, 
-        // Usamos el color de fondo de la tarjeta definido en el tema
         color: Theme.of(context).cardTheme.color!, 
         shadowColor: Colors.black,
         shape: BoxShape.rectangle,
         borderRadius: borderRadius,
-        clipBehavior: Clip.antiAlias, // Mantenemos el recorte de bordes
+        clipBehavior: Clip.antiAlias,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // --- Placeholder de la Imagen ---
-            Container(
+            // --- INICIO DE LA CORRECCIÓN ---
+            // Reemplazamos el Placeholder por la imagen real
+            SizedBox(
               height: 350,
               width: double.infinity,
-              // El color ya está en el AnimatedPhysicalModel
-              child: const Center(
-                child: Icon(Icons.image, size: 80, color: Colors.grey),
+              child: Image.asset(
+                widget.imageUrl, // Usamos la imagen pasada
+                fit: BoxFit.cover, // Hacemos que la imagen cubra el contenedor
               ),
             ),
+            // --- FIN DE LA CORRECCIÓN ---
           ],
         ),
       ),
     );
   }
 }
-// --- FIN DE LA CORRECCIÓN ---

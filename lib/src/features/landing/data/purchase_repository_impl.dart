@@ -25,9 +25,10 @@ class WhatsAppPurchaseRepository implements PurchaseRepository {
     required String productId,
     required String productName,
   }) async {
-    // 3. Lógica de "compra" para el Paso 1: Lanzar WhatsApp
+    
+    // CORRECCIÓN: Eliminamos el (ID: $productId) del mensaje
     final message = 
-        'Hola, estoy interesado en el plan $productName. ¿Podemos hablar? (ID: $productId)';
+        'Hola, estoy interesado en el plan $productName. ¿Podemos hablar?';
         
     await _urlLauncher.launchWhatsApp(_whatsAppNumber, message);
   }

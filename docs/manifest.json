@@ -1,11 +1,11 @@
 {
-    "name": "mindset",
-    "short_name": "mindset",
+    "name": "mindSET",
+    "short_name": "mindSET",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#1A1A1A",
+    "theme_color": "#1A1A1A",
+    "description": "El programa de transformación física y mental de Simon Costa.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

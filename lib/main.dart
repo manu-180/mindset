@@ -2,18 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mindset/src/config/router/app_router.dart';
 import 'package:mindset/src/config/theme/app_theme.dart';
-// 1. Importar la librería de gestos
-import 'package:flutter/gestures.dart';
-
-// 2. Definir un ScrollBehavior personalizado que incluya el mouse
-class MyCustomScrollBehavior extends MaterialScrollBehavior {
-  @override
-  Set<PointerDeviceKind> get dragDevices => { 
-    PointerDeviceKind.touch,
-    PointerDeviceKind.mouse, // <--- Habilita el arrastre con mouse
-  };
-}
-
 
 void main() {
   runApp(
@@ -36,9 +24,7 @@ class MyApp extends ConsumerWidget {
       
       theme: AppTheme.darkTheme,
       
-      // 3. Aplicar el ScrollBehavior personalizado a toda la app
-      scrollBehavior: MyCustomScrollBehavior(),
-      
+      // Ya no se aplica el ScrollBehavior global
       routerConfig: goRouter,
     );
   }

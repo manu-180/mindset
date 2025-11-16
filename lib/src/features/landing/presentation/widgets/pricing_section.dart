@@ -14,40 +14,50 @@ class PricingSection extends ConsumerWidget {
   ];
 
   Widget _buildCard({
-      required WidgetRef ref,
-      required String productId,
-      required String productName,
-      String? offerTitle,
-      required String planName,
-      required String price,
-      String? originalPrice,
-      required List<String> features,
-      bool isElite = false,
+    required WidgetRef ref,
+    required String productId,
+    required String productName,
+    String? offerTitle,
+    required String planName,
+    required String price,
+    String? originalPrice,
+    required List<String> features,
+    bool isElite = false,
+    required bool isDesktop, // <--- 1. Recibe el flag
   }) {
-      final initiatePurchase = ref.read(initiatePurchaseUseCaseProvider);
+    final initiatePurchase = ref.read(initiatePurchaseUseCaseProvider);
 
-      return _PricingCard(
-          planName: planName,
-          price: price,
-          originalPrice: originalPrice,
-          isElite: isElite,
-          offerTitle: offerTitle,
-          features: features,
-          onPressed: () {
-              initiatePurchase.execute(
-                  productId: productId,
-                  productName: productName,
-              );
-          },
-      );
+    return _PricingCard(
+      planName: planName,
+      price: price,
+      originalPrice: originalPrice,
+      isElite: isElite,
+      offerTitle: offerTitle,
+      features: features,
+      onPressed: () {
+        initiatePurchase.execute(
+          productId: productId,
+          productName: productName,
+        );
+      },
+      isDesktop: isDesktop, // <--- 2. Lo pasa a la tarjeta
+    );
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = Theme.of(context).textTheme;
-    
-    final List<String> monthlyFeatures = [..._baseFeatures, 'Acceso por 30 días.', 'Comunidad limitada.'];
-    final List<String> quarterlyFeatures = [..._baseFeatures, 'Ahorro del 18% anual.', 'Prioridad media en soporte.'];
+
+    final List<String> monthlyFeatures = [
+      ..._baseFeatures,
+      'Acceso por 30 días.',
+      'Comunidad limitada.'
+    ];
+    final List<String> quarterlyFeatures = [
+      ..._baseFeatures,
+      'Ahorro del 18% anual.',
+      'Prioridad media en soporte.'
+    ];
     final List<String> eliteFeatures = [
       'Mentoría 1:1 por Zoom.',
       'Soporte 24/7 vía WhatsApp.',
@@ -58,37 +68,6 @@ class PricingSection extends ConsumerWidget {
       'Basado en tu situación actual',
       'Orientado a tus objetivos',
     ];
-
-    final List<Widget> cards = [
-        _buildCard(
-            ref: ref,
-            productId: 'mindset_monthly',
-            productName: 'Plan Mensual mindSET',
-            planName: 'PLAN MENSUAL mindSET',
-            price: '50 u\$d',
-            features: monthlyFeatures,
-        ),
-        _buildCard(
-            ref: ref,
-            productId: 'mindset_quarterly',
-            productName: 'Plan Trimestral mindSET (Oferta)',
-            offerTitle: 'OFERTA 3 MESES',
-            planName: 'por tiempo limitado',
-            price: '115 u\$d',
-            originalPrice: '140 u\$d',
-            features: quarterlyFeatures,
-        ),
-        _buildCard(
-            ref: ref,
-            productId: 'mindset_elite_monthly',
-            productName: 'Plan Mensual mindSET ELITE',
-            planName: 'PLAN MENSUAL mindSET ELITE',
-            price: '200 u\$d',
-            features: eliteFeatures,
-            isElite: true,
-        ),
-    ];
-
 
     return Container(
       width: double.infinity,
@@ -101,28 +80,76 @@ class PricingSection extends ConsumerWidget {
             style: textTheme.headlineMedium,
           ),
           const SizedBox(height: 32),
-
           LayoutBuilder(
             builder: (context, constraints) {
               final isDesktop = constraints.maxWidth > 800;
 
+              // Definimos la lista de tarjetas aquí, pasando el flag
+              final List<Widget> cards = [
+                _buildCard(
+                  ref: ref,
+                  productId: 'mindset_monthly',
+                  productName: 'Plan Mensual mindSET',
+                  planName: 'PLAN MENSUAL mindSET',
+                  price: '50 u\$d',
+                  features: monthlyFeatures,
+                  isDesktop: isDesktop,
+                ),
+                _buildCard(
+                  ref: ref,
+                  productId: 'mindset_quarterly',
+                  productName: 'Plan Trimestral mindSET (Oferta)',
+                  offerTitle: 'OFERTA 3 MESES',
+                  planName: 'por tiempo limitado',
+                  price: '115 u\$d',
+                  originalPrice: '140 u\$d',
+                  features: quarterlyFeatures,
+                  isDesktop: isDesktop,
+                ),
+                _buildCard(
+                  ref: ref,
+                  productId: 'mindset_elite_monthly',
+                  productName: 'Plan Mensual mindSET ELITE',
+                  planName: 'PLAN MENSUAL mindSET ELITE',
+                  price: '200 u\$d',
+                  features: eliteFeatures,
+                  isElite: true,
+                  isDesktop: isDesktop,
+                ),
+              ];
+
               if (isDesktop) {
-                // CORRECCIÓN: Aumentamos el childAspectRatio de 0.70 a 0.80 para reducir la altura de la card.
-                return GridView.count(
-                  crossAxisCount: 3,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  mainAxisSpacing: 24.0,
-                  crossAxisSpacing: 32.0,
-                  childAspectRatio: 0.80,
-                  children: cards,
+                // --- 3. SOLUCIÓN: IntrinsicHeight + Row + Stretch ---
+                return IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: cards[0],
+                      ),
+                      const SizedBox(width: 32.0),
+                      Expanded(
+                        flex: 1,
+                        child: cards[1],
+                      ),
+                      const SizedBox(width: 32.0),
+                      Expanded(
+                        flex: 1,
+                        child: cards[2],
+                      ),
+                    ],
+                  ),
                 );
               } else {
+                // Layout Mobile (no necesita stretch)
                 return Column(
-                  children: cards.map((card) => Padding(
-                    padding: const EdgeInsets.only(bottom: 24.0),
-                    child: card,
-                  )).toList(),
+                  children: cards
+                      .map((card) => Padding(
+                            padding: const EdgeInsets.only(bottom: 24.0),
+                            child: card,
+                          ))
+                      .toList(),
                 );
               }
             },
@@ -132,7 +159,8 @@ class PricingSection extends ConsumerWidget {
     );
   }
 }
-// --- Widget reutilizable para la tarjeta de precios (modificado para hover y espaciado) ---
+
+// --- Widget reutilizable para la tarjeta de precios ---
 class _PricingCard extends StatefulWidget {
   const _PricingCard({
     required this.planName,
@@ -142,6 +170,7 @@ class _PricingCard extends StatefulWidget {
     this.offerTitle,
     this.originalPrice,
     this.isElite = false,
+    required this.isDesktop, // <--- Recibe el flag
   });
 
   final String? offerTitle;
@@ -151,7 +180,8 @@ class _PricingCard extends StatefulWidget {
   final List<String> features;
   final bool isElite;
   final VoidCallback onPressed;
-
+  final bool isDesktop; // <--- Propiedad
+  
   @override
   State<_PricingCard> createState() => _PricingCardState();
 }
@@ -163,28 +193,28 @@ class _PricingCardState extends State<_PricingCard> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    final accentColor = widget.isElite ? const Color(0xFFFFD600) : Theme.of(context).colorScheme.primary;
+    final accentColor =
+        widget.isElite ? const Color(0xFFFFD600) : Theme.of(context).colorScheme.primary;
     final cardBaseColor = Theme.of(context).cardTheme.color!;
 
     final buttonFillColor = accentColor;
     final buttonBaseColor = cardBaseColor;
 
-    // Define el color del borde y de fondo basado en si se está haciendo hover o si es la tarjeta Elite
-    final Color hoverBorderColor = widget.isElite ? const Color(0xFFFFD600) : const Color(0xFFE53935); // Rojo sutil para el hover
-    final Color baseBorderColor = widget.isElite ? Colors.transparent : Colors.transparent;
+    final Color hoverBorderColor = widget.isElite
+        ? const Color(0xFFFFD600)
+        : const Color(0xFFE53935);
+    final Color baseBorderColor =
+        widget.isElite ? Colors.transparent : Colors.transparent;
     final Color borderColor = _isHovering ? hoverBorderColor : baseBorderColor;
-    
-    // Lógica de grosor de borde: 3.0 para Elite (siempre), 1.0 en hover para no Elite.
-    final double borderWidth = _isHovering
-        ? (widget.isElite ? 3.0 : 1.0) // Reducción a 1.0 para no Elite en hover
-        : (widget.isElite ? 3.0 : 0.0);
-        
-    // Color de fondo para el hover (Aumentamos opacidad del amarillo Elite a 0.10)
-    final Color hoverCardColor = widget.isElite
-        ? const Color.fromRGBO(255, 214, 0, 0.10) // Amarillo más notorio (10% de opacidad)
-        : const Color.fromRGBO(229, 57, 53, 0.05); // Rojo/Bordo sutil (5% de opacidad)
-    final Color cardColor = _isHovering ? hoverCardColor : cardBaseColor;
 
+    final double borderWidth = _isHovering
+        ? (widget.isElite ? 3.0 : 1.0)
+        : (widget.isElite ? 3.0 : 0.0);
+
+    final Color hoverCardColor = widget.isElite
+        ? const Color.fromRGBO(255, 214, 0, 0.10)
+        : const Color.fromRGBO(229, 57, 53, 0.05);
+    final Color cardColor = _isHovering ? hoverCardColor : cardBaseColor;
 
     final defaultTextColor = Colors.white;
     final hoverTextColor = widget.isElite ? Colors.black : Colors.white;
@@ -194,17 +224,17 @@ class _PricingCardState extends State<_PricingCard> {
       onEnter: (_) => setState(() => _isHovering = true),
       onExit: (_) => setState(() => _isHovering = false),
       child: Card(
-        color: cardColor, // Usamos el color de fondo dinámico
-        elevation: _isHovering ? 8 : 4, // Aumentamos la elevación al hacer hover
+        color: cardColor,
+        elevation: _isHovering ? 8 : 4,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
-          side: BorderSide(color: borderColor, width: borderWidth), // Usamos el borde dinámico
+          side: BorderSide(color: borderColor, width: borderWidth),
         ),
-        // REDUCCIÓN DE ESPACIO: Reducimos el padding vertical de 32.0 a 24.0
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
+            // 4. Quitamos 'mainAxisSize: MainAxisSize.min' para que el Spacer funcione
             children: [
               if (widget.offerTitle != null)
                 Text(
@@ -219,8 +249,7 @@ class _PricingCardState extends State<_PricingCard> {
                 style: textTheme.titleMedium,
                 textAlign: TextAlign.center,
               ),
-              // REDUCCIÓN DE ESPACIO: Reducimos de 16 a 12
-              const SizedBox(height: 12), 
+              const SizedBox(height: 12),
               if (widget.originalPrice != null)
                 Text(
                   widget.originalPrice!,
@@ -237,23 +266,27 @@ class _PricingCardState extends State<_PricingCard> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              // REDUCCIÓN DE ESPACIO: Reducimos de 24 a 16
-              const SizedBox(height: 16), 
-
+              const SizedBox(height: 16),
+              
               // Lista de Features (Bullets)
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: widget.features.map((feature) => _FeatureBullet(
-                  text: feature,
-                  color: accentColor,
-                  fontWeight: bulletFontWeight,
-                )).toList(),
+                children: widget.features
+                    .map((feature) => _FeatureBullet(
+                          text: feature,
+                          color: accentColor,
+                          fontWeight: bulletFontWeight,
+                        ))
+                    .toList(),
               ),
 
-              const Spacer(),
+              // --- 5. Spacer condicional para alinear botones ---
+              // Solo se añade en desktop (donde las alturas son iguales)
+              if (widget.isDesktop)
+                const Spacer(),
 
-              // REDUCCIÓN DE ESPACIO: Reducimos de 24 a 16
-              const SizedBox(height: 16), 
+              // Espacio fijo para mobile (y padding inferior en desktop)
+              const SizedBox(height: 16),
 
               // Botón Animado
               Center(
@@ -302,7 +335,6 @@ class _FeatureBullet extends StatelessWidget {
               shape: BoxShape.circle,
             ),
           ),
-
           Expanded(
             child: Text(
               text,

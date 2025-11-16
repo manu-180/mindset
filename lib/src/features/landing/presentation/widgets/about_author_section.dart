@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mindset/src/constants/app_assets.dart'; 
 
 class AboutAuthorSection extends StatelessWidget {
   const AboutAuthorSection({super.key});
@@ -31,20 +32,8 @@ class AboutAuthorSection extends StatelessWidget {
               ),
               const SizedBox(height: 24),
 
-              // --- Placeholder para la imagen principal (Simon Costa) ---
-              // TODO: Reemplazar con la imagen de Simon Costa (1000150268.jpg)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Container(
-                  height: 400,
-                  width: double.infinity,
-                  color: Colors.grey[800],
-                  child: Center(
-                    child: Icon(Icons.fitness_center_outlined, size: 100, color: Colors.grey[600]),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 24),
+              // --- Imagen principal (Simon Costa) ---
+            
 
               // --- Texto biográfico (1ra parte) ---
               Text(
@@ -53,27 +42,26 @@ class AboutAuthorSection extends StatelessWidget {
               ),
               const SizedBox(height: 32),
 
-              // --- Placeholder para la grilla "Antes y Después" ---
-              // TODO: Reemplazar con las 4 imágenes (1000150269.jpg)
-              GridView.count(
-                crossAxisCount: 2,
+              // --- Grilla "Antes y Después" ---
+              GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
+                ),
+                itemCount: AppAssets.simonGridList.length, // Usamos la lista
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                mainAxisSpacing: 8,
-                crossAxisSpacing: 8,
-                children: List.generate(
-                  4,
-                  (index) => ClipRRect(
+                itemBuilder: (context, index) {
+                  return ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Container(
+                    child: Image.asset(
+                      AppAssets.simonGridList[index], // Usamos la lista
                       height: 180,
-                      color: Colors.grey[800],
-                      child: Center(
-                        child: Icon(Icons.photo_library_outlined, size: 50, color: Colors.grey[600]),
-                      ),
+                      fit: BoxFit.cover, // Asegura que la imagen cubra el espacio
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
               const SizedBox(height: 32),
 

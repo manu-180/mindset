@@ -31,21 +31,8 @@ class AboutAuthorSection extends StatelessWidget {
                 'Simon Costa',
                 style: textTheme.headlineLarge,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
 
-              // --- Imagen principal (Simon Costa) ---
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.asset(
-                  AppAssets.simonPrincipal, // Usa la constante
-                  height: 400, // Una altura fija aquí está bien
-                  width: double.infinity,
-                  fit: BoxFit.cover, 
-                ),
-              ),
-              const SizedBox(height: 24),
-
-              // --- Texto biográfico (1ra parte) ---
               Text(
                 'Descubrí cómo transformé mi vida y mi cuerpo de flaco, frustrado y con una pesima autoestima a musculoso, estando orgulloso de ver en quien me transforme y con un autoestima que nunca crei posible. Se cómo puedo ayudarte a hacer lo mismi. Con una década de experiencia, sé exactamente cómo te sientes y sé cómo superar el dolor y la frustración. Te garantizo que puedo ayudarte a cambiar tu vida, al igual que lo hice con la mia.',
                 style: textTheme.bodyLarge?.copyWith(color: Colors.white70),

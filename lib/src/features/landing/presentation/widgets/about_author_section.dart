@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// Asegúrate que la importación de app_assets sea la correcta
 import 'package:mindset/src/constants/app_assets.dart'; 
 
 class AboutAuthorSection extends StatelessWidget {
@@ -33,11 +34,20 @@ class AboutAuthorSection extends StatelessWidget {
               const SizedBox(height: 24),
 
               // --- Imagen principal (Simon Costa) ---
-            
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(
+                  AppAssets.simonPrincipal, // Usa la constante
+                  height: 400, // Una altura fija aquí está bien
+                  width: double.infinity,
+                  fit: BoxFit.cover, 
+                ),
+              ),
+              const SizedBox(height: 24),
 
               // --- Texto biográfico (1ra parte) ---
               Text(
-                'Descubrí cómo transformé mi vida y mi cuerpo de flaco, frustrado y con una pesima autoestima a musculoso, estando orgulloso de ver en quien me transforme y con un autoestima que nunca crei posible. Se cómo puedo ayudarte a hacer lo mismo. Con una década de experiencia, sé exactamente cómo te sientes y sé cómo superar el dolor y la frustración. Te garantizo que puedo ayudarte a cambiar tu vida, al igual que lo hice con la mia.',
+                'Descubrí cómo transformé mi vida y mi cuerpo de flaco, frustrado y con una pesima autoestima a musculoso, estando orgulloso de ver en quien me transforme y con un autoestima que nunca crei posible. Se cómo puedo ayudarte a hacer lo mismi. Con una década de experiencia, sé exactamente cómo te sientes y sé cómo superar el dolor y la frustración. Te garantizo que puedo ayudarte a cambiar tu vida, al igual que lo hice con la mia.',
                 style: textTheme.bodyLarge?.copyWith(color: Colors.white70),
               ),
               const SizedBox(height: 32),
@@ -45,20 +55,27 @@ class AboutAuthorSection extends StatelessWidget {
               // --- Grilla "Antes y Después" ---
               GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
+                  crossAxisCount: 2, // Mantiene 2 columnas
                   mainAxisSpacing: 8,
                   crossAxisSpacing: 8,
+                  // --- INICIO DE LA CORRECCIÓN ---
+                  // Asumimos que las imágenes son más altas que anchas (ej: ratio 3:4)
+                  // (Ancho / Alto = 3 / 4 = 0.75). Ajusta este valor si es necesario.
+                  childAspectRatio: 0.8, 
+                  // --- FIN DE LA CORRECCIÓN ---
                 ),
-                itemCount: AppAssets.simonGridList.length, // Usamos la lista
+                itemCount: AppAssets.simonGridList.length, 
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   return ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: Image.asset(
-                      AppAssets.simonGridList[index], // Usamos la lista
-                      height: 180,
-                      fit: BoxFit.cover, // Asegura que la imagen cubra el espacio
+                      AppAssets.simonGridList[index], 
+                      // --- INICIO DE LA CORRECCIÓN ---
+                      // Quitamos la altura fija (height: 180) que causaba el overflow
+                      fit: BoxFit.cover, 
+                      // --- FIN DE LA CORRECCIÓN ---
                     ),
                   );
                 },

@@ -7,11 +7,10 @@ class AppAssets {
 
   // --- Author Images ---
   // CORRECCIÓN: Cambiado a .JPG
-  static const String simonPrincipal = '${_basePath}simon1.JPG';
-  static const String simonGrid1 = '${_basePath}simon1.JPG';
-  static const String simonGrid2 = '${_basePath}simon2.JPG';
-  static const String simonGrid3 = '${_basePath}simon3.JPG';
-  static const String simonGrid4 = '${_basePath}simon4.JPG';
+  static const String simonGrid1 = '${_basePath}simon1.png';
+  static const String simonGrid2 = '${_basePath}simon2.png';
+  static const String simonGrid3 = '${_basePath}simon3.png';
+  static const String simonGrid4 = '${_basePath}simon4.png';
 
   /// Lista ordenada para la grilla
   static const List<String> simonGridList = [

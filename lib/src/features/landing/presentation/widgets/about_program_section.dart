@@ -18,10 +18,16 @@ class AboutProgramSection extends StatelessWidget {
     // 1. Padding exterior para dar margen a la tarjeta
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-      
+
       // 2. Card para contener la sección
       child: Card(
-        // El Card toma el estilo de AppTheme
+        // --- INICIO DE LA CORRECCIÓN ---
+        // Añadimos el borde rojo (color primario)
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: colorScheme.primary, width: 1.5),
+        ),
+        // --- FIN DE LA CORRECCIÓN ---
         child: Padding(
           // 3. Padding interior para el contenido
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),

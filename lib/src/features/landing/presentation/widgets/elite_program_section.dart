@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mindset/src/features/landing/domain/initiate_purchase_usecase.dart'; 
-import 'package:mindset/src/core/utils/url_launcher_service.dart';
+import 'package:mindset/src/features/landing/domain/initiate_purchase_usecase.dart'; // <--- Usamos este
+// import 'package:mindset/src/core/utils/url_launcher_service.dart'; // Ya no se usa aquí
 import 'package:mindset/src/core/widgets/buttons/hover_button.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart'; 
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class EliteProgramSection extends ConsumerWidget {
   const EliteProgramSection({super.key});
@@ -12,12 +12,9 @@ class EliteProgramSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
-    
-    // 1. Color de acento Elite (Dorado/Amarillo) para borde, título y estrellas
-    const Color eliteAccentColor = Color(0xFFFFD600); 
-    
-    // 2. Color bordo opaco para el fondo del botón (el color que te gustó)
-    const Color buttonBordoColor = Color(0xFF4A1414); 
+
+    const Color eliteAccentColor = Color(0xFFFFD600);
+    const Color buttonBordoColor = Color(0xFF4A1414);
 
     const includesFeatures = [
       'Mentoría personalizada conmigo (llamadas semanales 1 a 1)',
@@ -34,14 +31,15 @@ class EliteProgramSection extends ConsumerWidget {
       'Para el que no quiere excusas, quiere resultados.',
       'Para el que entiende que invertir en sí mismo es el paso más valiente hacia una vida distinta.',
     ];
-    
+
+    // --- CORRECCIÓN ---
+    // Volvemos a usar el UseCase, que es la forma correcta
     final initiatePurchase = ref.read(initiatePurchaseUseCaseProvider);
+    // --- FIN CORRECCIÓN ---
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-      
       child: Card(
-        // Borde dorado para el acento Elite
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
           side: const BorderSide(color: eliteAccentColor, width: 1.5),
@@ -67,7 +65,9 @@ class EliteProgramSection extends ConsumerWidget {
                 text: TextSpan(
                   style: textTheme.bodyLarge?.copyWith(color: Colors.white70),
                   children: [
-                    const TextSpan(text: 'Esta no es una rutina más. Es una experiencia de transformación '),
+                    const TextSpan(
+                        text:
+                            'Esta no es una rutina más. Es una experiencia de transformación '),
                     TextSpan(
                       text: 'física, mental y emocional',
                       style: TextStyle(
@@ -90,14 +90,14 @@ class EliteProgramSection extends ConsumerWidget {
                 style: textTheme.titleLarge,
               ),
               const SizedBox(height: 24),
-              ...includesFeatures.map((feature) => _FeatureListItem(text: feature)), 
+              ...includesFeatures
+                  .map((feature) => _FeatureListItem(text: feature)),
               const SizedBox(height: 32),
               Text(
                 '¿Para quién es esto?',
                 style: textTheme.titleLarge,
               ),
               const SizedBox(height: 24),
-              // Estrellas de color Dorado/Amarillo
               ...forWhoFeatures.map((feature) => _FeatureListItem(
                     text: feature,
                     iconColor: eliteAccentColor, // Íconos dorados
@@ -121,10 +121,15 @@ class EliteProgramSection extends ConsumerWidget {
               HoverButton(
                 backgroundColor: buttonBordoColor, // Fondo Bordo Opaco
                 onPressed: () {
+                  // --- INICIO DE LA CORRECCIÓN ---
+                  // Revertimos al método execute() del UseCase.
+                  // Esto está correcto porque tu repositorio se encarga
+                  // de convertir esto en un link de WhatsApp.
                   initiatePurchase.execute(
                     productId: 'mindset_elite_mentory',
                     productName: 'Mentoría mindSET ELITE (Contacto)',
                   );
+                  // --- FIN DE LA CORRECCIÓN ---
                 },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -136,9 +141,9 @@ class EliteProgramSection extends ConsumerWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    // const SizedBox(width: 12),
-                    // Ícono de WhatsApp blanco para contraste
-                    // FaIcon(FontAwesomeIcons.whatsapp, color: Colors.white, size: 20), 
+                    const SizedBox(width: 12),
+                    const FaIcon(FontAwesomeIcons.whatsapp,
+                        color: Colors.white, size: 20),
                   ],
                 ),
               ),
@@ -171,7 +176,7 @@ class _FeatureListItem extends StatelessWidget {
           Icon(
             icon,
             // Los checks estándar (no estrellas) usan el color primario de la app (rojo)
-            color: iconColor ?? Theme.of(context).colorScheme.primary, 
+            color: iconColor ?? Theme.of(context).colorScheme.primary,
             size: 24,
           ),
           const SizedBox(width: 16),

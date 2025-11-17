@@ -181,7 +181,7 @@ class _PricingCard extends StatefulWidget {
   final bool isElite;
   final VoidCallback onPressed;
   final bool isDesktop; // <--- Propiedad
-  
+
   @override
   State<_PricingCard> createState() => _PricingCardState();
 }
@@ -220,90 +220,122 @@ class _PricingCardState extends State<_PricingCard> {
     final hoverTextColor = widget.isElite ? Colors.black : Colors.white;
     final bulletFontWeight = widget.isElite ? FontWeight.bold : FontWeight.normal;
 
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovering = true),
-      onExit: (_) => setState(() => _isHovering = false),
-      child: Card(
-        color: cardColor,
-        elevation: _isHovering ? 8 : 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-          side: BorderSide(color: borderColor, width: borderWidth),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            // 4. Quitamos 'mainAxisSize: MainAxisSize.min' para que el Spacer funcione
-            children: [
-              if (widget.offerTitle != null)
+    // --- INICIO DE LA CORRECCIÓN ---
+    // Envolvemos el MouseRegion en un GestureDetector
+    // para capturar los eventos de toque (móvil)
+    return GestureDetector(
+      // Detecta el inicio del toque
+      onTapDown: (_) {
+        if (!_isHovering) {
+          setState(() => _isHovering = true);
+        }
+      },
+      // Detecta el fin del toque
+      onTapUp: (_) {
+        if (_isHovering) {
+          setState(() => _isHovering = false);
+        }
+      },
+      // Detecta si el toque se cancela (ej. al scrollear)
+      onTapCancel: () {
+        if (_isHovering) {
+          setState(() => _isHovering = false);
+        }
+      },
+      child: MouseRegion(
+        // onEnter/onExit para el mouse (desktop)
+        onEnter: (_) {
+          if (!_isHovering) {
+            setState(() => _isHovering = true);
+          }
+        },
+        onExit: (_) {
+          if (_isHovering) {
+            setState(() => _isHovering = false);
+          }
+        },
+        child: Card(
+          color: cardColor,
+          elevation: _isHovering ? 8 : 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(color: borderColor, width: borderWidth),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              // 4. Quitamos 'mainAxisSize: MainAxisSize.min' para que el Spacer funcione
+              children: [
+                if (widget.offerTitle != null)
+                  Text(
+                    widget.offerTitle!,
+                    style: textTheme.titleLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
                 Text(
-                  widget.offerTitle!,
-                  style: textTheme.titleLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
+                  widget.planName,
+                  style: textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 12),
+                if (widget.originalPrice != null)
+                  Text(
+                    widget.originalPrice!,
+                    style: textTheme.displayMedium?.copyWith(
+                      color: Colors.grey[600],
+                      decoration: TextDecoration.lineThrough,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                Text(
+                  widget.price,
+                  style: textTheme.displayLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
                 ),
-              Text(
-                widget.planName,
-                style: textTheme.titleMedium,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 12),
-              if (widget.originalPrice != null)
-                Text(
-                  widget.originalPrice!,
-                  style: textTheme.displayMedium?.copyWith(
-                    color: Colors.grey[600],
-                    decoration: TextDecoration.lineThrough,
+                const SizedBox(height: 16),
+
+                // Lista de Features (Bullets)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: widget.features
+                      .map((feature) => _FeatureBullet(
+                            text: feature,
+                            color: accentColor,
+                            fontWeight: bulletFontWeight,
+                          ))
+                      .toList(),
+                ),
+
+                // --- 5. Spacer condicional para alinear botones ---
+                // Solo se añade en desktop (donde las alturas son iguales)
+                if (widget.isDesktop) const Spacer(),
+
+                // Espacio fijo para mobile (y padding inferior en desktop)
+                const SizedBox(height: 16),
+
+                // Botón Animado
+                Center(
+                  child: AnimatedPurchaseButton(
+                    onPressed: widget.onPressed,
+                    text: 'TOMAR ACCION AHORA',
+                    baseColor: buttonBaseColor,
+                    hoverColor: buttonFillColor,
+                    textColor: defaultTextColor,
+                    hoverTextColor: hoverTextColor,
                   ),
-                  textAlign: TextAlign.center,
                 ),
-              Text(
-                widget.price,
-                style: textTheme.displayLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 16),
-              
-              // Lista de Features (Bullets)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: widget.features
-                    .map((feature) => _FeatureBullet(
-                          text: feature,
-                          color: accentColor,
-                          fontWeight: bulletFontWeight,
-                        ))
-                    .toList(),
-              ),
-
-              // --- 5. Spacer condicional para alinear botones ---
-              // Solo se añade en desktop (donde las alturas son iguales)
-              if (widget.isDesktop)
-                const Spacer(),
-
-              // Espacio fijo para mobile (y padding inferior en desktop)
-              const SizedBox(height: 16),
-
-              // Botón Animado
-              Center(
-                child: AnimatedPurchaseButton(
-                  onPressed: widget.onPressed,
-                  text: 'TOMAR ACCION AHORA',
-                  baseColor: buttonBaseColor,
-                  hoverColor: buttonFillColor,
-                  textColor: defaultTextColor,
-                  hoverTextColor: hoverTextColor,
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
+    // --- FIN DE LA CORRECCIÓN ---
   }
 }
 

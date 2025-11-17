@@ -79801,14 +79801,14 @@ r===$&&A.a()
 r.l()
 s.a08()},
 L(a){var s,r,q,p=this,o=null,n=A.S(a),m=A.bz(a,o,t.w).w.a.a
-p.aaZ(m<600?0.8:B.d.fE(316/m,0,1))
+p.aaZ(m<600?0.8:B.d.fE(266/m,0,1))
 s=p.as
 s===$&&A.a()
 r=A.S(a)
 n=A.bw("TESTIMONIOS",o,o,n.ok.e,o)
 q=p.e
 q===$&&A.a()
-return new A.Nr(p.ga9Z(),A.rc(!1,A.hS(o,A.da(A.b([n,B.bs,A.hm(A.ft(A.awf(new A.a6Z(),new A.zf(q,p.ga9x(),new A.Mq(new A.ami(p),1e4,!0,!0,!0,o),o)),370,o),B.MG,o,o,o,o),B.k5,A.my(new A.yt(B.mO,t.ly).gew().f_(0,new A.amj(p,a),t.tL).dF(0),B.a4,B.c0,B.W)],t.p),B.a4,B.R,B.cu),B.y,r.fx,o,o,o,o,o,B.Cv,o,o,1/0),s),B.SR)}}
+return new A.Nr(p.ga9Z(),A.rc(!1,A.hS(o,A.da(A.b([n,B.bs,A.hm(A.ft(A.awf(new A.a6Z(),new A.zf(q,p.ga9x(),new A.Mq(new A.ami(p),1e4,!0,!0,!0,o),o)),530,o),B.MG,o,o,o,o),B.k5,A.my(new A.yt(B.mO,t.ly).gew().f_(0,new A.amj(p,a),t.tL).dF(0),B.a4,B.c0,B.W)],t.p),B.a4,B.R,B.cu),B.y,r.fx,o,o,o,o,o,B.Cv,o,o,1/0),s),B.SR)}}
 A.ame.prototype={
 $0(){var s=this.a
 s.x=this.b
@@ -79851,7 +79851,7 @@ $S:0}
 A.TS.prototype={
 L(a){var s=this,r=A.eq(12),q=s.d?12:4,p=A.S(a).x1.b
 p.toString
-return A.hm(A.at5(!0,r,A.da(A.b([A.ft(A.J9(s.a.d,B.eL),370,1/0)],t.p),B.aD,B.R,B.W),B.b2,p,B.dW,B.I,q,B.l,B.aI),B.aK,null,new A.amc(s),new A.amd(s),null)}}
+return A.hm(A.at5(!0,r,A.da(A.b([A.ft(A.J9(s.a.d,B.eL),530,1/0)],t.p),B.aD,B.R,B.W),B.b2,p,B.dW,B.I,q,B.l,B.aI),B.aK,null,new A.amc(s),new A.amd(s),null)}}
 A.amc.prototype={
 $1(a){var s=this.a
 s.an(new A.amb(s))

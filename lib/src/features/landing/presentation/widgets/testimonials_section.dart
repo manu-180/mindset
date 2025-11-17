@@ -184,12 +184,11 @@ class _TestimonialsSectionState extends State<TestimonialsSection>
       targetViewportFraction = 0.8;
     } else {
       // En desktop, calculamos la fracción basada en un ancho fijo
-      const double fixedDesktopCardWidth = 300.0; // <<-- PUEDES AJUSTAR ESTE ANCHO FIJO
+      const double fixedDesktopCardWidth = 250.0; // Ancho 250px
       const double horizontalPagePadding = 8.0 * 2; // El padding (8px) a cada lado
       final double totalPageWidth = fixedDesktopCardWidth + horizontalPagePadding;
 
       // Calculamos la fracción necesaria.
-      // Usamos .clamp(0.0, 1.0) para evitar errores si la pantalla es más pequeña que la tarjeta
       targetViewportFraction = (totalPageWidth / screenWidth).clamp(0.0, 1.0);
     }
     // --- FIN DE LA CORRECCIÓN ---
@@ -217,8 +216,8 @@ class _TestimonialsSectionState extends State<TestimonialsSection>
               MouseRegion(
                 cursor: SystemMouseCursors.grab,
                 child: SizedBox(
-                  height: 370,
-                  // 4. APLICAR EL SCROLLBEHAVIOR SOLO A ESTE WIDGET
+                  // --- 1. CAMBIO DE ALTURA DEL CARRUSEL ---
+                  height: 530,
                   child: ScrollConfiguration(
                     behavior: MyCustomScrollBehavior(),
                     child: PageView.builder(
@@ -229,7 +228,6 @@ class _TestimonialsSectionState extends State<TestimonialsSection>
                         final actualDataIndex = index % _data.length;
                         final imagePath = _data[actualDataIndex];
 
-                        // Eliminamos el SizedBox con ancho fijo
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: _TestimonialCard(
@@ -313,11 +311,12 @@ class _TestimonialCardState extends State<_TestimonialCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: 370, // Mantiene la altura fija
+              // --- 2. CAMBIO DE ALTURA DE LA IMAGEN ---
+              height: 530,
               width: double.infinity,
               child: Image.asset(
                 widget.imageUrl,
-                fit: BoxFit.contain, // Mantenemos .contain como pediste
+                fit: BoxFit.contain, // Mantenemos .contain
               ),
             ),
           ],

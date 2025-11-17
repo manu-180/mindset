@@ -17,7 +17,7 @@ class LandingScreen extends ConsumerWidget {
   const LandingScreen({super.key});
 
   @override
-  Widget build(BuildContext, WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final scrollKeys = ref.watch(landingScrollProvider);
 
     return Scaffold(
@@ -26,41 +26,35 @@ class LandingScreen extends ConsumerWidget {
       body: Stack(
         children: [
           SingleChildScrollView(
-            key: scrollKeys.heroKey, // <-- USO 1 (Correcto, se queda aquí)
+            // 1. Quitar la clave de aquí
+            // key: scrollKeys.heroKey, 
             child: Column(
               children: [
-                // --- INICIO DE LA CORRECCIÓN ---
-                // Se elimina la clave de aquí para evitar el error.
-                const HeroSection(),
-                // --- FIN DE LA CORRECCIÓN ---
-
+                // 2. Poner la clave aquí
+                HeroSection(key: scrollKeys.heroKey), 
+                
                 FadeInOnScroll(
                   child: AboutProgramSection(key: scrollKeys.aboutKey),
                 ),
-
+                
                 FadeInOnScroll(
                   child: EliteProgramSection(key: scrollKeys.eliteKey),
                 ),
-
+                
                 FadeInOnScroll(
                   child: AboutAuthorSection(key: scrollKeys.authorKey),
                 ),
-
+                
                 FadeInOnScroll(
                   child: PricingSection(key: scrollKeys.plansKey),
                 ),
 
-                // --- INICIO DE LA CORRECCIÓN ---
-                // Eliminamos el FadeInOnScroll que envolvía a TestimonialsSection.
-                // La animación ahora se maneja internamente en TestimonialsSection
-                // usando visibility_detector para evitar el error de layout.
                 TestimonialsSection(key: scrollKeys.testimonialsKey),
-                // --- FIN DE LA CORREGCCIÓN ---
-
+                
                 FadeInOnScroll(
                   child: const GuaranteeSection(),
                 ),
-
+                
                 FadeInOnScroll(
                   child: const FaqSection(),
                 ),
